@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 
 namespace ParrotWings.Interfaces
 {
-    // удалить лишние ветки
-    //создавать ветки граматно!!!!!!
     public interface IDbRepository
     {
         #region Async methods
@@ -24,6 +22,7 @@ namespace ParrotWings.Interfaces
         IEnumerable<T> GetAll<T>(bool noTracking = true) where T : class;
         T Add<T>(T entity) where T : class;
         T Delete<T>(T entity) where T : class;
+        T Attach<T>(T entity) where T : class;
         int Commit();
 
         #endregion

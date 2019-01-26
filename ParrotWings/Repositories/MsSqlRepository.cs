@@ -58,6 +58,11 @@ namespace ParrotWings.Repositories
             return _dbContext.SaveChanges();
         }
 
+        public T Attach<T>(T entity) where T : class
+        {
+            return GetDbSet<T>().Attach(entity);
+        }
+
         #endregion
 
         #region Async Methods

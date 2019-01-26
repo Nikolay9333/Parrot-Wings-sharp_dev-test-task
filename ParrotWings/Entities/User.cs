@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ParrotWings.Entities
+﻿namespace ParrotWings.Entities
 {
     /// <summary>
     /// Пользователь сайта PW

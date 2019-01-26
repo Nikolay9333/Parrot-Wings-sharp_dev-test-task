@@ -18,8 +18,8 @@ namespace ParrotWings.Contexts
 
         #region Properties
 
-        public DbSet<Entities.User> Users { get; set; }
-        public DbSet<Entities.MoneyTransfer> MoneyTransfers { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<MoneyTransfer> MoneyTransfers { get; set; }
 
         #endregion
 
