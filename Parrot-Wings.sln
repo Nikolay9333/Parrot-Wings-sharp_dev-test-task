@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parrot-Wings", "Parrot-Wings\Parrot-Wings.csproj", "{5517A6FE-8993-4B1B-BFF0-2F504C8DE311}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParrotWingsApi", "Parrot-Wings\ParrotWingsApi.csproj", "{5517A6FE-8993-4B1B-BFF0-2F504C8DE311}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parrot-Wings.Tests", "Parrot-Wings.Tests\Parrot-Wings.Tests.csproj", "{42814BD2-C092-4077-8309-43DEAE50097E}"
 EndProject
