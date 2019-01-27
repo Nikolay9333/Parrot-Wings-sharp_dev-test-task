@@ -22,25 +22,25 @@ namespace ParrotWings.Entities
         public decimal Amount { get; set; }
 
         /// <summary>
-        /// ID отправителя
+        /// почта отправителя (FK)
         /// </summary>
-        public long SenderId { get; set; }
+        public string SenderEmail { get; set; }
 
         /// <summary>
         /// Отправитель
         /// </summary>
-        [ForeignKey("SenderId")]
+        [ForeignKey("SenderEmail")]
         public User Sender { get; set; }
 
         /// <summary>
-        /// ID получателя
+        /// Почта получателя (FK)
         /// </summary>
-        public long RecipientId { get; set; }
+        public string RecipientEmail { get; set; }
 
         /// <summary>
         /// Получатель
         /// </summary>
-        [ForeignKey("RecipientId")]
+        [ForeignKey("RecipientEmail")]
         public User Recipient { get; set; }
 
         /// <summary>

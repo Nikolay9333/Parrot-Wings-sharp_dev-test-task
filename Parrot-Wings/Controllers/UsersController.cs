@@ -5,8 +5,10 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using Ninject;
 using ParrotWings.Entities;
 using ParrotWings.Interfaces;
+using ParrotWings.Repositories;
 
 namespace Parrot_Wings.Controllers
 {
@@ -27,6 +29,19 @@ namespace Parrot_Wings.Controllers
         [ResponseType(typeof(IEnumerable<User>))]
         public IHttpActionResult Get()
         {
+            User user = new User()
+            {
+                Name = "Niko",
+                SurName = "Belik",
+                Balance = 500,
+                Password = "1234",
+                Email = "zadorozhnyyn@list.ru",
+            };
+
+           // _dbRepository.Attach(user);
+            _dbRepository.Add(user);
+            _dbRepository.Commit();
+
             var users = _dbRepository.GetAll<User>();
 
             //TODO возмжоно не зайдет 
@@ -57,7 +72,7 @@ namespace Parrot_Wings.Controllers
             _dbRepository.Add(user);
             _dbRepository.Commit();
 
-            return Json(new {id = user.Id});
+            return Ok();
         }
 
         // PUT: api/Users/5
