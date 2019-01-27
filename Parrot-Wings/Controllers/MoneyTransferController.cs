@@ -29,11 +29,13 @@ namespace Parrot_Wings.Controllers
         [ResponseType(typeof(IEnumerable<MoneyTransfer>))]
         public IHttpActionResult Get()
         {
-            var moneyTransfers = _dbRepository.GetAll<MoneyTransfer>();
-            var enumerable = moneyTransfers.ToList();
-            if (enumerable.Count > 0)
+            var email = User?.Identity?.Name;
+            var moneyTransfers = _dbRepository.GetAll<MoneyTransfer>()
+                .Where(mt => mt.SenderEmail == email || mt.RecipientEmail == email).ToList();
+
+            if (moneyTransfers.Count > 0)
             {
-                return Ok(enumerable);
+                return Ok(moneyTransfers);
             }
 
             return NotFound();
@@ -43,11 +45,18 @@ namespace Parrot_Wings.Controllers
         [ResponseType(typeof(MoneyTransfer))]
         public IHttpActionResult Get(int id)
         {
+            var email = User.Identity.Name;
+
             var moneyTransfer = _dbRepository.Get<MoneyTransfer>(id);
 
             if (moneyTransfer == null)
             {
                 return NotFound();
+            }
+
+            if (moneyTransfer.SenderEmail != email && moneyTransfer.RecipientEmail != email)
+            {
+                return BadRequest();
             }
 
             return Ok(moneyTransfer);
@@ -152,9 +161,14 @@ namespace Parrot_Wings.Controllers
 
         [HttpGet]
         [Route("api/GetMoneyTransferHistory")]
-        public IHttpActionResult GetMoneyTransferHistory(string email)
+        public IHttpActionResult GetMoneyTransferHistory()
         {
+            var email = User?.Identity?.Name;
             var history = MTHistory.GetMoneyTransferHistoryByEmail(_dbRepository, email);
+            if (history == null)
+            {
+                return NotFound();
+            }
 
             return Ok(history);
         }

@@ -48,8 +48,8 @@ namespace Parrot_Wings.Controllers
 
         // GET: api/Users/5
         [ResponseType(typeof(User))]
-        [Route("GetUser")]
-        public IHttpActionResult GetUser()
+        [Route("get-user-info")]
+        public IHttpActionResult GetUserInfo()
         {
             var email = User.Identity.Name;
             var user = PwUser.GetUserByEmail(_dbRepository, email);
