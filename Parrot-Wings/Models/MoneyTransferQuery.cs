@@ -14,7 +14,7 @@ namespace Parrot_Wings.Models
         /// </summary>
         [Required]
         [JsonProperty("amount")]
-        public decimal Amount { get; set; }
+        public long Amount { get; set; }
 
         /// <summary>
         /// почта отправителя (FK)

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
-using System.Web.Mvc;
 using ParrotWings.Entities;
 using ParrotWings.Interfaces;
+using Parrot_Wings.Models;
 using  PwUser = ParrotWings.Entities.User;
 
 namespace Parrot_Wings.Controllers
@@ -32,31 +32,43 @@ namespace Parrot_Wings.Controllers
         [ResponseType(typeof(IEnumerable<User>))]
         public IHttpActionResult Get()
         {
-            var q = User;
-            var users = _dbRepository.GetAll<User>().Select(u => new {u.UserName, u.Email, u.Balance}).ToList();
+            var users = _dbRepository.GetAll<User>().Select(u => new
+            {
+                u.UserName,
+                u.Email,
+                u.Balance
+            }).ToList();
 
-            return users?.Count > 0
-                ? (IHttpActionResult) Ok(users)
-                : NotFound();
+            if (users.Count > 0)
+            {
+                return Ok(users);
+            }
+
+            return NotFound();
         }
 
         // GET: api/Users/5
         [ResponseType(typeof(User))]
-        public IHttpActionResult Get(long id)
+        [Route("GetUser")]
+        public IHttpActionResult GetUser()
         {
             var email = User.Identity.Name;
-            PwUser.GetUserByEmail(_dbRepository, email);
-
-            var user = _dbRepository.Get<User>(id);
+            var user = PwUser.GetUserByEmail(_dbRepository, email);
+            if (user == null)
+            {
+                return BadRequest();
+            }
 
             return Ok(user);
         }
 
         // PUT: api/Users/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult Put(User user)
+        public IHttpActionResult Put(RegisterModel registerModel)
         {
-            if (!ModelState.IsValid)
+            var email = User.Identity.Name;
+            var user = PwUser.GetUserByEmail(_dbRepository, email);
+            if (!ModelState.IsValid || user == null)
             {
                 return BadRequest(ModelState);
             }
@@ -69,9 +81,10 @@ namespace Parrot_Wings.Controllers
 
         // DELETE: api/Users/5
         [ResponseType(typeof(User))]
-        public IHttpActionResult Delete(int id)
+        public IHttpActionResult Delete()
         {
-            var user = _dbRepository.Get<User>(id);
+            var email = User.Identity.Name;
+            var user = PwUser.GetUserByEmail(_dbRepository, email);
 
             if (user == null)
             {

@@ -26,7 +26,7 @@ namespace ParrotWings.Entities
         [Required]
         [JsonProperty("balance")]
         [Column("balance")]
-        public decimal Balance { get; set; }
+        public long Balance { get; set; }
 
         /// <summary>
         /// Имя пользователя

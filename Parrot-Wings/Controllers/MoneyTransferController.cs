@@ -7,6 +7,7 @@ using ParrotWings.Entities;
 using ParrotWings.Interfaces;
 using Parrot_Wings.Models;
 using  PwUser = ParrotWings.Entities.User;
+using  MTHistory = ParrotWings.Entities.MoneyTransferHistory;
 
 namespace Parrot_Wings.Controllers
 {
@@ -29,10 +30,12 @@ namespace Parrot_Wings.Controllers
         {
             var moneyTransfers = _dbRepository.GetAll<MoneyTransfer>();
             var enumerable = moneyTransfers.ToList();
+            if (enumerable.Count > 0)
+            {
+                return Ok(enumerable);
+            }
 
-            return enumerable.Count > 0
-                ? (IHttpActionResult) Ok(enumerable)
-                : NotFound();
+            return NotFound();
         }
 
         // GET: api/MoneyTransfers/5
@@ -41,9 +44,12 @@ namespace Parrot_Wings.Controllers
         {
             var moneyTransfer = _dbRepository.Get<MoneyTransfer>(id);
 
-            return moneyTransfer != null
-                ? (IHttpActionResult) Ok(moneyTransfer)
-                : NotFound();
+            if (moneyTransfer == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(moneyTransfer);
         }
 
         // POST: api/MoneyTransfers
@@ -142,6 +148,16 @@ namespace Parrot_Wings.Controllers
             }
 
             return Ok();
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("api/GetMoneyTransferHistory")]
+        public IHttpActionResult GetMoneyTransferHistory(string email)
+        {
+            var history = MTHistory.GetMoneyTransferHistoryByEmail(_dbRepository, email);
+
+            return Ok(history);
         }
     }
 }
