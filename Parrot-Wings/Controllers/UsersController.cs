@@ -17,22 +17,11 @@ namespace Parrot_Wings.Controllers
         #region Fields
 
         private readonly IDbRepository _dbRepository;
-        private IEnumerable<int> a;
 
-        public UsersController(IEnumerable<int> a/*IDbRepository dbRepository*/)
+        public UsersController(IDbRepository dbRepository)
         {
-            //IKernel ninjectKernel = new StandardKernel();
-            //ninjectKernel.Bind<IDbRepository>().To<MsSqlRepository>();
-            //this._dbRepository = ninjectKernel.Get<IDbRepository>();
-
-            this.a = a;
-        //    this._dbRepository = dbRepository;
+            this._dbRepository = dbRepository;
         }
-
-        //public UsersController()
-        //{
-
-        //}
 
         #endregion
 
@@ -45,10 +34,11 @@ namespace Parrot_Wings.Controllers
                 Name = "Niko",
                 SurName = "Belik",
                 Balance = 500,
-                Password = "1234"
+                Password = "1234",
+                Email = "zadorozhnyyn@list.ru",
             };
 
-            _dbRepository.Attach(user);
+           // _dbRepository.Attach(user);
             _dbRepository.Add(user);
             _dbRepository.Commit();
 
@@ -82,7 +72,7 @@ namespace Parrot_Wings.Controllers
             _dbRepository.Add(user);
             _dbRepository.Commit();
 
-            return Json(new {id = user.Id});
+            return Ok();
         }
 
         // PUT: api/Users/5

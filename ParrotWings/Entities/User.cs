@@ -10,10 +10,11 @@ namespace ParrotWings.Entities
         #region Properties
 
         /// <summary>
-        /// ID пользователя
+        /// Электронная почта пользователя
         /// </summary>
+        [StringLength(254)]
         [Key]
-        public long Id { get; set; }
+        public string Email { get; set; }
 
         /// <summary>
         /// Имя пользователя
@@ -28,13 +29,6 @@ namespace ParrotWings.Entities
         [StringLength(50)]
         [Required]
         public string SurName { get; set; }
-
-        /// <summary>
-        /// Электронная почта пользователя
-        /// </summary>
-        [StringLength(254)]
-        [Required]
-        public string Email { get; set; }
 
         /// <summary>
         /// Пароль пользователя от учетной записи

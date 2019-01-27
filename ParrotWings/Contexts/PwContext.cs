@@ -7,15 +7,8 @@ using ParrotWings.Entities;
 
 namespace ParrotWings.Contexts
 {
-    //добавить DI
     public class PwContext : DbContext
     {
-        #region Fields
-
-        private static readonly string ConnectionString;
-
-        #endregion
-
         #region Properties
 
         public DbSet<User> Users { get; set; }
@@ -25,16 +18,8 @@ namespace ParrotWings.Contexts
 
         #region Constructors
 
-        //static PwContext()
-        //{
-        //    ConnectionString = new ConfigurationBuilder()
-        //        .AddJsonFile("appsettings.json").Build()
-        //        .GetConnectionString("DbConnection");
-        //}
-
-        public PwContext(/*IConfiguration config = null*/) : base(/*config?.GetConnectionString*/("DbConnection"))
+        public PwContext(IConfiguration config) : base(config?.GetConnectionString("DbConnection"))
         {
-            //var q = config.GetConnectionString("DbConnection");
         }
 
         #endregion

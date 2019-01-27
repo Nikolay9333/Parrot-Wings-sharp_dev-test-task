@@ -19,10 +19,9 @@ namespace ParrotWings.Repositories
 
         #region  Constructors
 
-        public MsSqlRepository(/*DbContext dbContext*/)
+        public MsSqlRepository(DbContext dbContext)
         {
-            //_dbContext = dbContext;
-            _dbContext = new PwContext();
+            _dbContext = dbContext;
         }
 
         #endregion

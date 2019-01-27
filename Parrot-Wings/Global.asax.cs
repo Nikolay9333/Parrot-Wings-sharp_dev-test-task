@@ -7,8 +7,8 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Ninject;
 using Ninject.Modules;
-using Parrot_Wings.Util;
-using NinjectDependencyResolver = Parrot_Wings.Util.NinjectDependencyResolver;
+//using Parrot_Wings.Util;
+//using NinjectDependencyResolver = Parrot_Wings.Util.NinjectDependencyResolver;
 
 namespace Parrot_Wings
 {
@@ -19,9 +19,9 @@ namespace Parrot_Wings
             GlobalConfiguration.Configure(WebApiConfig.Register);
 
             // RegisterServices(new StandardKernel());
-            NinjectModule registrations = new NinjectRegistrations();
-            var kernel = new StandardKernel(registrations);
-            DependencyResolver.SetResolver(new NinjectDependencyResolver(kernel));
+            //NinjectModule registrations = new NinjectRegistrations();
+            //var kernel = new StandardKernel(registrations);
+            //DependencyResolver.SetResolver(new NinjectDependencyResolver(kernel));
         }
 
         //private static void RegisterServices(IKernel kernel)
