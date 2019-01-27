@@ -17,13 +17,13 @@ namespace Parrot_Wings.Models
         public long Amount { get; set; }
 
         /// <summary>
-        /// почта отправителя (FK)
+        /// почта отправителя
         /// </summary>
         [JsonProperty("senderEmail")]
         public string SenderEmail { get; set; }
 
         /// <summary>
-        /// Почта получателя (FK)
+        /// Почта получателя
         /// </summary>
         [JsonProperty("recipientEmail")]
         [Column("recipient_email")]

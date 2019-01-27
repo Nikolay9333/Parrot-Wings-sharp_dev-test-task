@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -10,7 +9,7 @@ using  PwUser = ParrotWings.Entities.User;
 
 namespace Parrot_Wings.Controllers
 {
-    [System.Web.Http.Authorize]
+    [Authorize]
     public class UsersController : ApiController
     {
         #region Fields

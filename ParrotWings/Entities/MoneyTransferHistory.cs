@@ -47,7 +47,7 @@ namespace ParrotWings.Entities
 	            CommitAt,
 	            (SELECT fn FROM fullName) AS CorrespondentName,
 	            IIF(@email = RecipientEmail, -1, 1) * amount AS TransactionAmount,
-	            500 + sum(Amount) OVER (ORDER BY commitAt) AS ResultingBalance
+	            500 + sum(IIF(@email = RecipientEmail, -1, 1) * amount) OVER (ORDER BY commitAt) AS ResultingBalance
             FROM MoneyTransfers AS mt
             WHERE @email IN (SenderEmail, RecipientEmail) AND CommitAt IS NOT NULL
             ORDER BY CommitAt;";

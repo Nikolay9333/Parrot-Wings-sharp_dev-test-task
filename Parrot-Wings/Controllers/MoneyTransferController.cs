@@ -11,6 +11,7 @@ using  MTHistory = ParrotWings.Entities.MoneyTransferHistory;
 
 namespace Parrot_Wings.Controllers
 {
+    [Authorize]
     public class MoneyTransferController : ApiController
     {
         #region Fields
@@ -97,7 +98,6 @@ namespace Parrot_Wings.Controllers
             return Ok(moneyTransfer);
         }
 
-        [Authorize]
         [HttpPost]
         [Route("api/ExecuteMoneyTransfer")]
         public IHttpActionResult ExecuteMoneyTransfer([FromBody] MoneyTransferQuery moneyTransferQeury)
@@ -150,7 +150,6 @@ namespace Parrot_Wings.Controllers
             return Ok();
         }
 
-        [Authorize]
         [HttpGet]
         [Route("api/GetMoneyTransferHistory")]
         public IHttpActionResult GetMoneyTransferHistory(string email)
