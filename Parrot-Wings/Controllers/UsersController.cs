@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
-using Ninject;
 using ParrotWings.Entities;
 using ParrotWings.Interfaces;
-using ParrotWings.Repositories;
 
 namespace Parrot_Wings.Controllers
 {
@@ -20,7 +15,7 @@ namespace Parrot_Wings.Controllers
 
         public UsersController(IDbRepository dbRepository)
         {
-            this._dbRepository = dbRepository;
+            _dbRepository = dbRepository;
         }
 
         #endregion
@@ -31,10 +26,10 @@ namespace Parrot_Wings.Controllers
         {
             User user = new User()
             {
-                Name = "Niko",
-                SurName = "Belik",
+                //Name = "Niko",
+                //SurName = "Belik",
                 Balance = 500,
-                Password = "1234",
+               // Password = "1234",
                 Email = "zadorozhnyyn@list.ru",
             };
 
@@ -56,9 +51,10 @@ namespace Parrot_Wings.Controllers
         {
             var user = _dbRepository.Get<User>(id);
 
-            return user == null
-                ? (IHttpActionResult) Ok(user)
-                : NotFound();
+            return Ok(user);
+            //return user == null
+            //    ? (IHttpActionResult) Ok(user)
+            //    : NotFound();
         }
 
         // POST: api/Users
@@ -95,10 +91,13 @@ namespace Parrot_Wings.Controllers
         public IHttpActionResult Delete(int id)
         {
             var user = _dbRepository.Get<User>(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
+
+            return Ok(user);
+            //TODO fix
+            //if (user == null)
+            //{
+            //    return NotFound();
+            //}
 
             _dbRepository.Delete(user);
             _dbRepository.Commit();

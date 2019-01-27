@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ParrotWings.Entities;
@@ -18,7 +15,7 @@ namespace Parrot_Wings.Controllers
 
         public MoneyTransferController(IDbRepository dbRepository)
         {
-            this._dbRepository = dbRepository;
+            _dbRepository = dbRepository;
         }
 
         #endregion
@@ -27,11 +24,11 @@ namespace Parrot_Wings.Controllers
         [ResponseType(typeof(IEnumerable<MoneyTransfer>))]
         public IHttpActionResult Get()
         {
-            var MoneyTransfers = _dbRepository.GetAll<MoneyTransfer>();
+            var moneyTransfers = _dbRepository.GetAll<MoneyTransfer>();
 
             //TODO возмжоно не зайдет 
-            return MoneyTransfers?.Count() > 0
-                ? (IHttpActionResult) Ok(MoneyTransfers)
+            return moneyTransfers?.Count() > 0
+                ? (IHttpActionResult) Ok(moneyTransfers)
                 : NotFound();
         }
 
@@ -39,37 +36,37 @@ namespace Parrot_Wings.Controllers
         [ResponseType(typeof(MoneyTransfer))]
         public IHttpActionResult Get(int id)
         {
-            var MoneyTransfer = _dbRepository.Get<MoneyTransfer>(id);
+            var moneyTransfer = _dbRepository.Get<MoneyTransfer>(id);
 
-            return MoneyTransfer == null
-                ? (IHttpActionResult) Ok(MoneyTransfer)
+            return moneyTransfer == null
+                ? (IHttpActionResult) Ok(moneyTransfer)
                 : NotFound();
         }
 
         // POST: api/MoneyTransfers
-        public IHttpActionResult Post(MoneyTransfer MoneyTransfer)
+        public IHttpActionResult Post(MoneyTransfer moneyTransfer)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _dbRepository.Add(MoneyTransfer);
+            _dbRepository.Add(moneyTransfer);
             _dbRepository.Commit();
 
-            return Json(new {id = MoneyTransfer.Id});
+            return Json(new {id = moneyTransfer.Id});
         }
 
         // PUT: api/MoneyTransfers/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult Put(MoneyTransfer MoneyTransfer)
+        public IHttpActionResult Put(MoneyTransfer moneyTransfer)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _dbRepository.Attach(MoneyTransfer);
+            _dbRepository.Attach(moneyTransfer);
             _dbRepository.Commit();
 
             return Ok();
@@ -79,16 +76,16 @@ namespace Parrot_Wings.Controllers
         [ResponseType(typeof(MoneyTransfer))]
         public IHttpActionResult Delete(int id)
         {
-            var MoneyTransfer = _dbRepository.Get<MoneyTransfer>(id);
-            if (MoneyTransfer == null)
+            var moneyTransfer = _dbRepository.Get<MoneyTransfer>(id);
+            if (moneyTransfer == null)
             {
                 return NotFound();
             }
 
-            _dbRepository.Delete(MoneyTransfer);
+            _dbRepository.Delete(moneyTransfer);
             _dbRepository.Commit();
 
-            return Ok(MoneyTransfer);
+            return Ok(moneyTransfer);
         }
     }
 }
