@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,7 +24,9 @@ namespace ParrotWings.Interfaces
         T Add<T>(T entity) where T : class;
         T Delete<T>(T entity) where T : class;
         T Attach<T>(T entity) where T : class;
+        IEnumerable<T> ExecuteQuery<T>(string query, params object[] parameters);
         int Commit();
+        DbContextTransaction BeginTransaction();
 
         #endregion
     }

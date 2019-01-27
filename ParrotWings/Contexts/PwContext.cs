@@ -31,6 +31,12 @@ namespace ParrotWings.Contexts
             return new PwContext(configuration);
         }
 
+        public static void GetMostPopularTransactions()
+        {
+            var sql = "SELECT * FROM moneyTransfer AS mt " +
+                      "";
+        }
+
         #endregion
     }
 }

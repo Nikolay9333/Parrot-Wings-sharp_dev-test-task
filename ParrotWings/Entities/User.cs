@@ -1,11 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.SqlClient;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Newtonsoft.Json;
+using ParrotWings.Interfaces;
 
 namespace ParrotWings.Entities
 {
+
+
     /// <summary>
     /// Пользователь сайта PW
     /// </summary>
@@ -17,38 +24,27 @@ namespace ParrotWings.Entities
         /// Текущий баланс пользователя
         /// </summary>
         [Required]
-        public decimal Balance { get; set; }
+        [JsonProperty("balance")]
+        [Column("balance")]
+        public long Balance { get; set; }
 
-        #endregion
+        /// <summary>
+        /// Имя пользователя
+        /// </summary>
+        [StringLength(40)]
+        [Required]
+        [JsonProperty("name")]
+        [Column("name")]
+        public string Name { get; set; }
 
-        #region DelMe
-
-        ///// <summary>
-        ///// Электронная почта пользователя
-        ///// </summary>
-        //[StringLength(254)]
-        //[Key]
-        //public string Email { get; set; }
-
-        ///// <summary>
-        ///// Имя пользователя
-        ///// </summary>
-        //[StringLength(40)]
-        //[Required]
-        //public string Name { get; set; }
-
-        ///// <summary>
-        ///// Фамилия пользователя
-        ///// </summary>
-        //[StringLength(50)]
-        //[Required]
-        //public string SurName { get; set; }
-
-        /////// <summary>
-        ///// Пароль пользователя от учетной записи
-        ///// </summary>
-        //[Required]
-        //public string Password { get; set; }
+        /// <summary>
+        /// Фамилия пользователя
+        /// </summary>
+        [StringLength(50)]
+        [Required]
+        [JsonProperty("surname")]
+        [Column("surname")]
+        public string SurName { get; set; }
 
         #endregion
 
@@ -61,6 +57,21 @@ namespace ParrotWings.Entities
             var userIdentity = await manager.CreateIdentityAsync(this, authenticationType);
             // Здесь добавьте настраиваемые утверждения пользователя
             return userIdentity;
+        }
+
+        #endregion
+
+        #region Sync Methods
+
+        public static User GetUserByEmail(IDbRepository dbRepository, string email)
+        {
+            var param = new SqlParameter("@email", email);
+            var sqlQuery = "SELECT * FROM AspNetUsers " +
+                           "WHERE Email = @email";
+
+            var user = dbRepository.ExecuteQuery<User>(sqlQuery, param).FirstOrDefault();
+
+            return user;
         }
 
         #endregion

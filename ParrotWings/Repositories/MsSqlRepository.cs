@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ParrotWings.Interfaces;
@@ -51,9 +52,19 @@ namespace ParrotWings.Repositories
             return GetDbSet<T>().Remove(entity);
         }
 
+        public IEnumerable<T> ExecuteQuery<T>(string query, params object[] parameters)
+        {
+            return  _dbContext.Database.SqlQuery<T>(query, parameters).ToList();
+        }
+
         public int Commit()
         {
             return _dbContext.SaveChanges();
+        }
+
+        public DbContextTransaction BeginTransaction()
+        {
+            return _dbContext.Database.BeginTransaction();
         }
 
         public T Attach<T>(T entity) where T : class

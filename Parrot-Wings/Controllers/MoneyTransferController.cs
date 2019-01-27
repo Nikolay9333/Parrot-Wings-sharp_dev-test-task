@@ -1,12 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ParrotWings.Entities;
 using ParrotWings.Interfaces;
+using Parrot_Wings.Models;
+using  PwUser = ParrotWings.Entities.User;
+using  MTHistory = ParrotWings.Entities.MoneyTransferHistory;
 
 namespace Parrot_Wings.Controllers
 {
+    [Authorize]
     public class MoneyTransferController : ApiController
     {
         #region Fields
@@ -25,11 +30,13 @@ namespace Parrot_Wings.Controllers
         public IHttpActionResult Get()
         {
             var moneyTransfers = _dbRepository.GetAll<MoneyTransfer>();
+            var enumerable = moneyTransfers.ToList();
+            if (enumerable.Count > 0)
+            {
+                return Ok(enumerable);
+            }
 
-            //TODO возмжоно не зайдет 
-            return moneyTransfers?.Count() > 0
-                ? (IHttpActionResult) Ok(moneyTransfers)
-                : NotFound();
+            return NotFound();
         }
 
         // GET: api/MoneyTransfers/5
@@ -38,9 +45,12 @@ namespace Parrot_Wings.Controllers
         {
             var moneyTransfer = _dbRepository.Get<MoneyTransfer>(id);
 
-            return moneyTransfer == null
-                ? (IHttpActionResult) Ok(moneyTransfer)
-                : NotFound();
+            if (moneyTransfer == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(moneyTransfer);
         }
 
         // POST: api/MoneyTransfers
@@ -54,7 +64,7 @@ namespace Parrot_Wings.Controllers
             _dbRepository.Add(moneyTransfer);
             _dbRepository.Commit();
 
-            return Json(new {id = moneyTransfer.Id});
+            return Ok(new {id = moneyTransfer.Id});
         }
 
         // PUT: api/MoneyTransfers/5
@@ -86,6 +96,67 @@ namespace Parrot_Wings.Controllers
             _dbRepository.Commit();
 
             return Ok(moneyTransfer);
+        }
+
+        [HttpPost]
+        [Route("api/ExecuteMoneyTransfer")]
+        public IHttpActionResult ExecuteMoneyTransfer([FromBody] MoneyTransferQuery moneyTransferQeury)
+        {
+            var currentUserEmail = User.Identity.Name;
+            var sender = PwUser.GetUserByEmail(_dbRepository, moneyTransferQeury?.SenderEmail);
+
+            if (sender == null || currentUserEmail != sender.Email || sender.Balance < moneyTransferQeury?.Amount)
+            {
+                return BadRequest();
+            }
+
+            var recipient = PwUser.GetUserByEmail(_dbRepository, moneyTransferQeury?.RecipientEmail);
+            if (recipient == null)
+            {
+                return BadRequest();
+            }
+
+            _dbRepository.Attach(sender);
+            _dbRepository.Attach(recipient);
+
+            using (var transaction = _dbRepository.BeginTransaction())
+            {
+                try
+                {
+                    sender.Balance -= moneyTransferQeury.Amount;
+                    recipient.Balance += moneyTransferQeury.Amount;
+
+                    var transfer = new MoneyTransfer()
+                    {
+                        Amount = moneyTransferQeury.Amount,
+                        SenderEmail = sender.Email,
+                        RecipientEmail = recipient.Email,
+                        CommitAt = DateTime.Now
+                    };
+
+                    _dbRepository.Add(transfer);
+                    _dbRepository.Commit();
+
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+
+                    return InternalServerError();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("api/GetMoneyTransferHistory")]
+        public IHttpActionResult GetMoneyTransferHistory(string email)
+        {
+            var history = MTHistory.GetMoneyTransferHistoryByEmail(_dbRepository, email);
+
+            return Ok(history);
         }
     }
 }
