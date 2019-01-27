@@ -25,16 +25,16 @@ namespace ParrotWings.Contexts
 
         #region Constructors
 
-        static PwContext()
-        {
-            ConnectionString = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json").Build()
-                .GetConnectionString("DbConnection");
-        }
+        //static PwContext()
+        //{
+        //    ConnectionString = new ConfigurationBuilder()
+        //        .AddJsonFile("appsettings.json").Build()
+        //        .GetConnectionString("DbConnection");
+        //}
 
-        public PwContext() : base(ConnectionString)
+        public PwContext(/*IConfiguration config = null*/) : base(/*config?.GetConnectionString*/("DbConnection"))
         {
-
+            //var q = config.GetConnectionString("DbConnection");
         }
 
         #endregion

@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ParrotWings.Contexts;
 using ParrotWings.Interfaces;
 
 namespace ParrotWings.Repositories
@@ -18,9 +19,10 @@ namespace ParrotWings.Repositories
 
         #region  Constructors
 
-        public MsSqlRepository(DbContext dbContext)
+        public MsSqlRepository(/*DbContext dbContext*/)
         {
-            _dbContext = dbContext;
+            //_dbContext = dbContext;
+            _dbContext = new PwContext();
         }
 
         #endregion

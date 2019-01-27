@@ -21,6 +21,11 @@ namespace Parrot_Wings.Controllers
             this._dbRepository = dbRepository;
         }
 
+        public MoneyTransferController()
+        {
+
+        }
+
         #endregion
 
         // GET: api/MoneyTransfers

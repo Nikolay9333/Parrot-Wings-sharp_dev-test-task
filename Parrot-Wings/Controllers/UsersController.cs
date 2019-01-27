@@ -5,8 +5,10 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using Ninject;
 using ParrotWings.Entities;
 using ParrotWings.Interfaces;
+using ParrotWings.Repositories;
 
 namespace Parrot_Wings.Controllers
 {
@@ -15,11 +17,22 @@ namespace Parrot_Wings.Controllers
         #region Fields
 
         private readonly IDbRepository _dbRepository;
+        private IEnumerable<int> a;
 
-        public UsersController(IDbRepository dbRepository)
+        public UsersController(IEnumerable<int> a/*IDbRepository dbRepository*/)
         {
-            this._dbRepository = dbRepository;
+            //IKernel ninjectKernel = new StandardKernel();
+            //ninjectKernel.Bind<IDbRepository>().To<MsSqlRepository>();
+            //this._dbRepository = ninjectKernel.Get<IDbRepository>();
+
+            this.a = a;
+        //    this._dbRepository = dbRepository;
         }
+
+        //public UsersController()
+        //{
+
+        //}
 
         #endregion
 
@@ -27,6 +40,18 @@ namespace Parrot_Wings.Controllers
         [ResponseType(typeof(IEnumerable<User>))]
         public IHttpActionResult Get()
         {
+            User user = new User()
+            {
+                Name = "Niko",
+                SurName = "Belik",
+                Balance = 500,
+                Password = "1234"
+            };
+
+            _dbRepository.Attach(user);
+            _dbRepository.Add(user);
+            _dbRepository.Commit();
+
             var users = _dbRepository.GetAll<User>();
 
             //TODO возмжоно не зайдет 
