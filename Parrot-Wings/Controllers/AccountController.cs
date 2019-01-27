@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ParrotWings.Managers;
 using ParrotWings.Entities;
+using ParrotWings.Interfaces;
 using Parrot_Wings.Models;
 
 namespace Parrot_Wings.Controllers
@@ -16,10 +17,11 @@ namespace Parrot_Wings.Controllers
     public class AccountController : ApiController
     {
         private AppUserManager _userManager;
+        private IDbRepository _dbRepository;
 
-        public AccountController()
+        public AccountController(IDbRepository dbRepository)
         {
-
+            _dbRepository = dbRepository;
         }
 
         public AccountController(AppUserManager userManager,
@@ -50,9 +52,16 @@ namespace Parrot_Wings.Controllers
                     return BadRequest(ModelState);
                 }
 
-                User user = new User() {UserName = model.Email, Email = model.Email, Balance = 500};
+                var user = new User()
+                {
+                    UserName = model.Email,
+                    Name = model.Name,
+                    SurName = model.Surname,
+                    Email = model.Email,
+                    Balance = 500
+                };
 
-                IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+                var result = await UserManager.CreateAsync(user, model.Password);
 
                 if (!result.Succeeded)
                 {
@@ -68,7 +77,6 @@ namespace Parrot_Wings.Controllers
 
             return Ok();
         }
-
 
         protected override void Dispose(bool disposing)
         {

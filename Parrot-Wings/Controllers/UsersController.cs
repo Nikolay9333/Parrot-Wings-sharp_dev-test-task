@@ -1,17 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Web.Mvc;
 using ParrotWings.Entities;
 using ParrotWings.Interfaces;
+using  PwUser = ParrotWings.Entities.User;
 
 namespace Parrot_Wings.Controllers
 {
+    [System.Web.Http.Authorize]
     public class UsersController : ApiController
     {
         #region Fields
 
         private readonly IDbRepository _dbRepository;
+
+        #endregion
+
+        #region Controllers
 
         public UsersController(IDbRepository dbRepository)
         {
@@ -24,51 +32,24 @@ namespace Parrot_Wings.Controllers
         [ResponseType(typeof(IEnumerable<User>))]
         public IHttpActionResult Get()
         {
-            User user = new User()
-            {
-                //Name = "Niko",
-                //SurName = "Belik",
-                Balance = 500,
-               // Password = "1234",
-                Email = "zadorozhnyyn@list.ru",
-            };
+            var q = User;
+            var users = _dbRepository.GetAll<User>().Select(u => new {u.UserName, u.Email, u.Balance}).ToList();
 
-           // _dbRepository.Attach(user);
-            _dbRepository.Add(user);
-            _dbRepository.Commit();
-
-            var users = _dbRepository.GetAll<User>();
-
-            //TODO возмжоно не зайдет 
-            return users?.Count() > 0
+            return users?.Count > 0
                 ? (IHttpActionResult) Ok(users)
                 : NotFound();
         }
 
         // GET: api/Users/5
         [ResponseType(typeof(User))]
-        public IHttpActionResult Get(int id)
+        public IHttpActionResult Get(long id)
         {
+            var email = User.Identity.Name;
+            PwUser.GetUserByEmail(_dbRepository, email);
+
             var user = _dbRepository.Get<User>(id);
 
             return Ok(user);
-            //return user == null
-            //    ? (IHttpActionResult) Ok(user)
-            //    : NotFound();
-        }
-
-        // POST: api/Users
-        public IHttpActionResult Post(User user)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            _dbRepository.Add(user);
-            _dbRepository.Commit();
-
-            return Ok();
         }
 
         // PUT: api/Users/5
@@ -92,12 +73,10 @@ namespace Parrot_Wings.Controllers
         {
             var user = _dbRepository.Get<User>(id);
 
-            return Ok(user);
-            //TODO fix
-            //if (user == null)
-            //{
-            //    return NotFound();
-            //}
+            if (user == null)
+            {
+                return NotFound();
+            }
 
             _dbRepository.Delete(user);
             _dbRepository.Commit();
