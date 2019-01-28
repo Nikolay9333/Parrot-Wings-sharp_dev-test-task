@@ -7,7 +7,6 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ParrotWings.Managers;
 using ParrotWings.Entities;
-using ParrotWings.Interfaces;
 using Parrot_Wings.Models;
 
 namespace Parrot_Wings.Controllers
@@ -17,11 +16,9 @@ namespace Parrot_Wings.Controllers
     public class AccountController : ApiController
     {
         private AppUserManager _userManager;
-        private IDbRepository _dbRepository;
 
-        public AccountController(IDbRepository dbRepository)
+        public AccountController()
         {
-            _dbRepository = dbRepository;
         }
 
         public AccountController(AppUserManager userManager,

@@ -5,6 +5,9 @@ using ParrotWings.Entities;
 
 namespace ParrotWings.Contexts
 {
+    /// <summary>
+    /// Контекст для базы данных  Parrot-Wings
+    /// </summary>
     public class PwContext : IdentityDbContext<User>
     {
         #region Properties
@@ -29,12 +32,6 @@ namespace ParrotWings.Contexts
                 .AddJsonFile("appsettings.json").Build();
 
             return new PwContext(configuration);
-        }
-
-        public static void GetMostPopularTransactions()
-        {
-            var sql = "SELECT * FROM moneyTransfer AS mt " +
-                      "";
         }
 
         #endregion

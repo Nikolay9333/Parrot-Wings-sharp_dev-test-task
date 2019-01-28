@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using ParrotWings.Contexts;
 using ParrotWings.Interfaces;
 
 namespace ParrotWings.Entities
@@ -35,10 +33,13 @@ namespace ParrotWings.Entities
 
         #endregion
 
+        #region Public Static methods
+
         public static List<MoneyTransferHistory> GetMoneyTransferHistoryByEmail(IDbRepository dbRepository,
             string email)
         {
-            var sqlQuery = @";WITH fullName AS
+            var param = new SqlParameter("@email", email);
+            const string sqlQuery = @";WITH fullName AS
                 (
 	                SELECT Name + ' ' + SurName AS fn 
 	                FROM AspNetUsers WHERE Email = @email
@@ -52,11 +53,11 @@ namespace ParrotWings.Entities
             WHERE @email IN (SenderEmail, RecipientEmail) AND CommitAt IS NOT NULL
             ORDER BY CommitAt;";
 
-            var param = new SqlParameter("@email", email);
+            var mtHistory = dbRepository.ExecuteQuery<MoneyTransferHistory>(sqlQuery, param).ToList();
 
-            var moneyTransferHistory = dbRepository.ExecuteQuery<MoneyTransferHistory>(sqlQuery, param).ToList();
-
-            return moneyTransferHistory;
+            return mtHistory;
         }
+
+        #endregion
     }
 }

@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace ParrotWings.Entities
 {
     /// <summary>
-    /// Денежный перевод на сайте ПМ
+    /// Денежный перевод на сайте ПВ
     /// </summary>
     public class MoneyTransfer
     {
@@ -31,6 +31,8 @@ namespace ParrotWings.Entities
         /// </summary>
         [JsonProperty("senderEmail")]
         [Column("sender_email")]
+        [StringLength(254)]
+        [Required]
         public string SenderEmail { get; set; }
 
         /// <summary>
@@ -38,6 +40,8 @@ namespace ParrotWings.Entities
         /// </summary>
         [JsonProperty("recipientEmail")]
         [Column("recipient_email")]
+        [StringLength(254)]
+        [Required]
         public string RecipientEmail { get; set; }
 
         /// <summary>

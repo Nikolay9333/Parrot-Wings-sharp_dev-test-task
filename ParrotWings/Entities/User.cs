@@ -11,8 +11,6 @@ using ParrotWings.Interfaces;
 
 namespace ParrotWings.Entities
 {
-
-
     /// <summary>
     /// Пользователь сайта PW
     /// </summary>

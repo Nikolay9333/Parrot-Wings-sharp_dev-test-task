@@ -86,7 +86,7 @@ namespace ParrotWings.Repositories
         public async Task<T> GetAsync<T>(CancellationToken cancellationToken = default(CancellationToken),
             params object[] keyValues) where T : class
         {
-            var result = await GetDbSet<T>().FindAsync(cancellationToken, keyValues);
+            var result = await GetDbSet<T>().FindAsync(cancellationToken, keyValues).ConfigureAwait(false);
 
             return result;
         }
